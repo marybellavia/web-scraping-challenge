@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mission to Mars</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="jumbotron text-center">
+        <h1>Mission to Mars</h1>
+        <a class="btn btn-primary btn-lg text-center" href="/scrape" role="button">Scrape New Data!</a>  
+      </div>
+    </div>
+    <div class="row">
+      <h2>Latest Mars News</h2>
+      <h3>{{mars.latest.title}}</h3>
+      <p>{{mars.latest.paragraph}}</p>
+    </div>
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <h2>Featured Mars Image</h2>
+        <img class="img-responsive" src="{{ mars.latest.image }}" alt="{{ mars.latest.title }}">
+      </div>
+      <div class="col-md-6 text-center">
+        <h2>Mars Facts</h2>
+        {{ mars.table_html|safe }}
+      </div>
+    </div>
+    <div class="row">
+      <h2 class="text-center">Mars Hemispheres</h2>
+      <hr>
+        
+        {% for hemi in mars.hemisphere_dict %}
+          <div class="col-md-6 text-center">
+          <h3>{{ hemi.title }}</h3>
+          <a class="btn btn-primary text-center" href="{{ hemi.dl_image_url }}" role="button">Download a High Resolution Image</a>
+          <img class="img-responsive" src="{{ hemi.image_url }}" alt="{{ hemi.title }}">
+          </div>
+        {% endfor %}
+      
+    </div>
+  </div>
+</body>
+
+</html>

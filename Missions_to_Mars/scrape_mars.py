@@ -8,14 +8,19 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 def init_browser():
     # @NOTE: Replace the path with your actual path to the chromedriver
-    executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+    executable_path = {"executable_path": "chromedriver.exe"}
     return Browser("chrome", **executable_path, headless=False)
 
 
 def scrape():
     browser = init_browser()
 
+    # creating dictionary for return
     mars_dict = {}
+
+    # URL of news page to be scraped and visit it with browser
+    news_url = 'https://mars.nasa.gov/news/'
+    browser.visit(news_url)
     # creating HTML object
     html = browser.html
     # initiating soup object for news scrape
@@ -23,8 +28,9 @@ def scrape():
     # searching html for latest news
     slide_elem = news_soup.select_one('ul.item_list li.slide')
     # getting title and paragraph for latest article
-    title = slide_elem.find('div', class_='content_title').text
-    paragraph = slide_elem.find('div', class_='article_teaser_body').text
+    latest_title = slide_elem.find('div', class_='content_title').text
+    latest_paragraph = slide_elem.find('div', class_='article_teaser_body').text
+
     
     # URL of image page to be scraped and visit it with browser
     space_image_url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
@@ -38,7 +44,7 @@ def scrape():
     # slicing the page url to attach image url in a string
     new_space_image_url = space_image_url[0:-10]
     # attaching the image url to sliced page url
-    image_url = f"{new_space_image_url}{image}"
+    featured_image_url = f"{new_space_image_url}{image}"
     
     # URL of facts page to be scraped and visit it with browser
     facts_url = 'https://space-facts.com/mars/'
@@ -74,17 +80,23 @@ def scrape():
             # getting image_url
             html = browser.html
             image_url_soup = BeautifulSoup(html, 'html.parser')
-            image_url = image_url_soup.find_all('dd')[1].a['href']
+            dl_image_url = image_url_soup.find_all('dd')[1].a['href']
+            image_url = f"{dl_image_url}/full.jpg"
             # getting title from name
             title = name[0:-9]
             # creating dict and adding to list
-            entry = {'title': title, 'image_url': image_url}
+            entry = {'title': title, 'image_url': image_url, 'dl_image_url': dl_image_url}
             hemi_list.append(entry)
             # redirecting back to the main page to continue loop
             browser.visit(hemi_image_url)
             print("Scrape successful!")
         except:
             print("Scrape unsuccessful!")
+    
+
+    mars_dict = {"latest": {"title": latest_title, "paragraph": latest_paragraph, "image": featured_image_url},
+    "table_html": facts_html, 
+    "hemisphere_dict" : hemi_list}
     
     # Close the browser after scraping
     browser.quit()
