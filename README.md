@@ -1,0 +1,5 @@
+# Mission to Mars
+
+* I began by began by scraping the four websites listed in the Instructions for the given information. I found the instructions and hints for which class tags to search for in the html to be out of date. 
+* Once I had scraped all the desired data in a jupyter notebook, I converted my code into a Flask application. I started by creating the app.py and the index.html because I wasn't quite sure how I wanted to structure the return of my scraped data. In laying out how the Flask app portion and html rendering of the data would playout, I was able to understand what I wanted to return with my scrape_mars.py.
+* I included the option, via a button, to download high resolution tif images for the four hemispheres of Mars in addition to rendering the smaller sized jpg images. I included extra images in my submission to show the hemisphere images are responsive.
